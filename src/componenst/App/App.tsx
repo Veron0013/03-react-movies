@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react"
-import { getTandingMovies } from "../../services/ApiMovieService"
+import { createPortal } from "react-dom"
+import { getMovieById, getTandingMovies } from "../../services/ApiMovieService"
 import { Toaster } from "react-hot-toast"
-import { MyToastType, type Movie, type MovieData, type SearchParams } from "../../services/types"
+import { MyToastType, type ApiMovieData, type Movie, type SearchParams } from "../../services/types"
 
 import SearchBar from "../searchBar/SearchBar"
 import ToastMessage from "../../services/ToastMessage"
@@ -14,16 +15,22 @@ import MovieModal from "../movieModal/MovieModal"
 
 function App() {
 	const [movies, setMovies] = useState<Movie[]>([])
+	const [movie, setMovie] = useState<Movie | null>(null)
 	const [isLoading, setIsLoading] = useState(false)
 	const [isError, setIsError] = useState(false)
+	const [isModalError, setIsModalError] = useState(false)
 
 	const [isModalOpen, setIsModalOpen] = useState(false)
 	const openModal = () => setIsModalOpen(true)
-	const closeModal = () => setIsModalOpen(false)
+
+	const closeModal = () => {
+		setIsModalOpen(false)
+		setMovie(null)
+	}
 
 	const handleSearch = async (
 		queryParams: SearchParams,
-		callBackFunc: (searchParams: SearchParams) => Promise<MovieData>,
+		callBackFunc: (searchParams: SearchParams) => Promise<ApiMovieData>,
 		isTranding: boolean = false
 	) => {
 		if (!isTranding && !queryParams.query?.length) {
@@ -32,6 +39,7 @@ function App() {
 		}
 		try {
 			setMovies([])
+			setMovie(null)
 			setIsLoading(true)
 			setIsError(false)
 			const data = await callBackFunc(queryParams)
@@ -46,31 +54,54 @@ function App() {
 		}
 	}
 
+	const handleClick = async (movie_id: number) => {
+		const qParams: SearchParams = {
+			movie_id,
+			language: "en-US",
+		}
+		try {
+			setIsLoading(true)
+			setIsModalError(false)
+			const selectedMovie: Movie = await getMovieById(qParams)
+			setMovie(selectedMovie)
+			setIsModalOpen(true)
+		} catch {
+			console.log("first")
+			setIsModalOpen(false)
+			setIsModalError(true)
+		} finally {
+			setIsLoading(false)
+		}
+	}
+
 	useEffect(() => {
 		const fetchData = async () => {
 			const qParams: SearchParams = {
 				language: "en-US",
 			}
-			console.log("first")
 			await handleSearch(qParams, getTandingMovies, true)
 		}
 
 		fetchData()
 	}, [])
 
-	const handleClick = (movieId: string) => {
-		console.log(movieId)
-	}
+	useEffect(() => {
+		if (isModalError) {
+			const timer = setTimeout(() => setIsModalError(false), 3000)
+			return () => clearTimeout(timer)
+		}
+	}, [isModalError])
 
 	return (
 		<>
 			<Toaster />
 			<SearchBar onSubmit={handleSearch} />
-			{isLoading && <Loader />}
-			{isError && <ErrorMessage />}
+			{isLoading && createPortal(<Loader />, document.body)}
+			{isError && createPortal(<ErrorMessage />, document.body)}
+			{isModalError && createPortal(<ErrorMessage />, document.body)}
 			{movies.length > 0 && <MovieGrid items={movies} onSelect={handleClick} />}
 			<button onClick={openModal}>Open modal</button>
-			{isModalOpen && <MovieModal onClose={closeModal} movieData={movies[4]} />}
+			{isModalOpen && movie && <MovieModal onClose={closeModal} movieData={movie} />}
 		</>
 	)
 }

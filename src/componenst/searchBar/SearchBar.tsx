@@ -1,11 +1,11 @@
 import { getMovies } from "../../services/ApiMovieService"
-import type { MovieData, SearchParams } from "../../services/types"
+import type { ApiMovieData, SearchParams } from "../../services/types"
 import styles from "./SearchBar.module.css"
 
 interface SearchBarProps {
 	onSubmit: (
 		queryParams: SearchParams,
-		callBackFunc: (searchParams: SearchParams) => Promise<MovieData>
+		callBackFunc: (searchParams: SearchParams) => Promise<ApiMovieData>
 	) => void | Promise<void>
 }
 

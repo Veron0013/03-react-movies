@@ -3,13 +3,14 @@ import { PIC_URL } from "../../services/vars"
 import css from "./MovieGrid.module.css"
 
 interface MovieListProps {
-	onSelect: (movieId: string) => void
+	onSelect: (movieId: number) => void
 	items: Movie[]
 }
 
 export default function MovieGrid({ items, onSelect }: MovieListProps) {
 	const handleClick = (e: React.MouseEvent<HTMLLIElement>) => {
-		return onSelect(e.currentTarget.id)
+		const movie_id: number = Number(e.currentTarget.id)
+		return onSelect(movie_id)
 	}
 
 	return (

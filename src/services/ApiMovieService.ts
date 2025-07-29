@@ -1,6 +1,6 @@
 import axios from "axios"
-import { type MovieData, type SearchParams } from "./types"
-import { URL, TRANDING_URL } from "./vars"
+import { type ApiMovieData, type Movie, type SearchParams } from "./types"
+import { URL, TRANDING_URL, DETAILS_URL } from "./vars"
 
 interface QueryParams {
 	headers: {
@@ -10,12 +10,16 @@ interface QueryParams {
 	params: SearchParams
 }
 
-export const getMovies = async (searchParams: SearchParams): Promise<MovieData> => {
+export const getMovies = async (searchParams: SearchParams): Promise<ApiMovieData> => {
 	return await getApiData(URL, createQueryParams(searchParams))
 }
 
-export const getTandingMovies = async (searchParams: SearchParams): Promise<MovieData> => {
+export const getTandingMovies = async (searchParams: SearchParams): Promise<ApiMovieData> => {
 	return await getApiData(TRANDING_URL, createQueryParams(searchParams))
+}
+
+export const getMovieById = async (searchParams: SearchParams): Promise<Movie> => {
+	return await getApiData(`${DETAILS_URL}${searchParams.movie_id}`, createQueryParams(searchParams))
 }
 
 const createQueryParams = (searchParams: SearchParams): QueryParams => ({
@@ -26,7 +30,7 @@ const createQueryParams = (searchParams: SearchParams): QueryParams => ({
 	params: { ...searchParams },
 })
 
-const getApiData = async (url: string, queryParams: QueryParams) => {
-	const response = await axios.get<MovieData>(url, queryParams)
+const getApiData = async <T>(url: string, queryParams: QueryParams): Promise<T> => {
+	const response = await axios.get<T>(url, queryParams)
 	return response.data
 }

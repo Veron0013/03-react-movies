@@ -5,6 +5,16 @@ export enum MyToastType {
 	custom = "custom",
 }
 
+export interface SearchParams {
+	include_adult?: boolean
+	language?: string
+	include_image_language?: string
+	page?: number
+	query?: string
+	year?: number
+	movie_id?: number
+}
+
 export interface dataFromForm {
 	type: MyToastType
 	stringData: string
@@ -25,20 +35,35 @@ export interface Movie {
 	video?: boolean // за замовчуванням true
 	vote_average?: number // за замовчуванням 0
 	vote_count?: number // за замовчуванням 0
+	belongs_to_collection?: object | null
+	budget?: number
+	genres?: { id: number; name: string }[]
+	homepage?: string
+	imdb_id?: string
+	production_companies?: {
+		id: number
+		logo_path: string | null
+		name: string
+		origin_country: string
+	}[]
+	production_countries?: {
+		iso_3166_1: string
+		name: string
+	}[]
+	revenue?: number
+	runtime?: number
+	spoken_languages?: {
+		iso_639_1: string
+		name: string
+	}[]
+	status?: string
+	tagline?: string
+	media_type?: string
 }
 
-export interface MovieData {
+export interface ApiMovieData {
 	page: number
 	results: Movie[]
 	total_pages: number
 	total_results: number
-}
-
-export interface SearchParams {
-	include_adult?: boolean
-	language?: string
-	include_image_language?: string
-	page?: number
-	query?: string
-	year?: number
 }
