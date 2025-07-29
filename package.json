@@ -11,8 +11,11 @@
   },
   "dependencies": {
     "axios": "^1.11.0",
+    "country-flag-icons": "^1.5.19",
     "react": "^19.1.0",
-    "react-dom": "^19.1.0"
+    "react-dom": "^19.1.0",
+    "react-hot-toast": "^2.5.2",
+    "react-loader-spinner": "^6.1.6"
   },
   "devDependencies": {
     "@eslint/js": "^9.30.1",

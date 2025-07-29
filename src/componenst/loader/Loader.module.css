@@ -1,4 +1,9 @@
 .text {
+	padding-left: 40px;
+}
+
+.wrapper {
+	display: flex;
 	font-size: 16px;
 	text-align: center;
 	max-width: 600px;
@@ -9,4 +14,5 @@
 	color: #084298;
 	background-color: #e8f4fd;
 	border-color: #b6d4fe;
+	align-items: center;
 }

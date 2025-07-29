@@ -1,8 +1,14 @@
-import React from "react"
 import styles from "./searchBar.module.css"
 
-export default function SearchBar() {
-	const handleSubmit = () => {}
+interface SearchBarProps {
+	onSubmit: (query: string) => void
+}
+
+export default function SearchBar({ onSubmit }: SearchBarProps) {
+	const handleSubmit = (formData: FormData) => {
+		const queryData = formData.get("query") as string
+		onSubmit(queryData.trim())
+	}
 
 	return (
 		<header className={styles.header}>
