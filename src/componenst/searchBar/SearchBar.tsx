@@ -1,13 +1,24 @@
+import { getMovies } from "../../services/ApiMovieService"
+import type { MovieData, SearchParams } from "../../services/types"
 import styles from "./SearchBar.module.css"
 
 interface SearchBarProps {
-	onSubmit: (query: string) => void
+	onSubmit: (
+		queryParams: SearchParams,
+		callBackFunc: (searchParams: SearchParams) => Promise<MovieData>
+	) => void | Promise<void>
 }
 
 export default function SearchBar({ onSubmit }: SearchBarProps) {
 	const handleSubmit = (formData: FormData) => {
 		const queryData = formData.get("query") as string
-		onSubmit(queryData.trim())
+
+		const qParams: SearchParams = {
+			query: queryData.trim(),
+			page: 1,
+			language: "en-US",
+		}
+		onSubmit(qParams, getMovies)
 	}
 
 	return (

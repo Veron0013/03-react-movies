@@ -33,3 +33,12 @@ export interface MovieData {
 	total_pages: number
 	total_results: number
 }
+
+export interface SearchParams {
+	include_adult?: boolean
+	language?: string
+	include_image_language?: string
+	page?: number
+	query?: string
+	year?: number
+}

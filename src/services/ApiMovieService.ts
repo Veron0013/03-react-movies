@@ -1,21 +1,32 @@
 import axios from "axios"
-import { type MovieData } from "./types"
-import { URL } from "./vars"
+import { type MovieData, type SearchParams } from "./types"
+import { URL, TRANDING_URL } from "./vars"
 
-export const getMovies = async (query: string, page: number = 1): Promise<MovieData> => {
-	const queryParam = {
-		headers: {
-			accept: "application/json",
-			Authorization: `Bearer ${import.meta.env.VITE_TMDB_TOKEN}`,
-		},
-		params: {
-			include_adult: false,
-			language: "en-US",
-			include_image_language: "en,null",
-			page,
-			query,
-		},
+interface QueryParams {
+	headers: {
+		accept: "application/json"
+		Authorization: string
 	}
-	const response = await axios.get<MovieData>(URL, queryParam)
+	params: SearchParams
+}
+
+export const getMovies = async (searchParams: SearchParams): Promise<MovieData> => {
+	return await getApiData(URL, createQueryParams(searchParams))
+}
+
+export const getTandingMovies = async (searchParams: SearchParams): Promise<MovieData> => {
+	return await getApiData(TRANDING_URL, createQueryParams(searchParams))
+}
+
+const createQueryParams = (searchParams: SearchParams): QueryParams => ({
+	headers: {
+		accept: "application/json",
+		Authorization: `Bearer ${import.meta.env.VITE_TMDB_TOKEN}`,
+	},
+	params: { ...searchParams },
+})
+
+const getApiData = async (url: string, queryParams: QueryParams) => {
+	const response = await axios.get<MovieData>(url, queryParams)
 	return response.data
 }

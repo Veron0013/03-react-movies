@@ -1,7 +1,7 @@
-import { useState } from "react"
-import { getMovies } from "../../services/ApiMovieService"
+import { useEffect, useState } from "react"
+import { getTandingMovies } from "../../services/ApiMovieService"
 import { Toaster } from "react-hot-toast"
-import { MyToastType, type Movie } from "../../services/types"
+import { MyToastType, type Movie, type MovieData, type SearchParams } from "../../services/types"
 
 import SearchBar from "../searchBar/SearchBar"
 import ToastMessage from "../../services/ToastMessage"
@@ -21,8 +21,12 @@ function App() {
 	const openModal = () => setIsModalOpen(true)
 	const closeModal = () => setIsModalOpen(false)
 
-	const handleSearsh = async (query: string) => {
-		if (!query.length) {
+	const handleSearch = async (
+		queryParams: SearchParams,
+		callBackFunc: (searchParams: SearchParams) => Promise<MovieData>,
+		isTranding: boolean = false
+	) => {
+		if (!isTranding && !queryParams.query?.length) {
 			ToastMessage(MyToastType.loading, "Please enter your search query.")
 			return
 		}
@@ -30,7 +34,7 @@ function App() {
 			setMovies([])
 			setIsLoading(true)
 			setIsError(false)
-			const data = await getMovies(query)
+			const data = await callBackFunc(queryParams)
 			if (!data.results.length) {
 				ToastMessage(MyToastType.error, "No movies found for your request.")
 			}
@@ -42,13 +46,29 @@ function App() {
 		}
 	}
 
+	useEffect(() => {
+		const fetchData = async () => {
+			const qParams: SearchParams = {
+				language: "en-US",
+			}
+			console.log("first")
+			await handleSearch(qParams, getTandingMovies, true)
+		}
+
+		fetchData()
+	}, [])
+
+	const handleClick = (movieId: string) => {
+		console.log(movieId)
+	}
+
 	return (
 		<>
 			<Toaster />
-			<SearchBar onSubmit={handleSearsh} />
+			<SearchBar onSubmit={handleSearch} />
 			{isLoading && <Loader />}
 			{isError && <ErrorMessage />}
-			{movies.length > 0 && <MovieGrid items={movies} />}
+			{movies.length > 0 && <MovieGrid items={movies} onSelect={handleClick} />}
 			<button onClick={openModal}>Open modal</button>
 			{isModalOpen && <MovieModal onClose={closeModal} movieData={movies[4]} />}
 		</>
