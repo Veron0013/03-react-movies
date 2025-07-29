@@ -1,4 +1,4 @@
-import styles from "./searchBar.module.css"
+import styles from "./SearchBar.module.css"
 
 interface SearchBarProps {
 	onSubmit: (query: string) => void
