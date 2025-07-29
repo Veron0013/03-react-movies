@@ -1,5 +1,6 @@
+import { isAdultGenre } from "../../services/ApiMovieService"
 import { type Movie } from "../../services/types"
-import { PIC_URL } from "../../services/vars"
+import { ADULT_ALERT, PIC_URL } from "../../services/vars"
 import css from "./MovieGrid.module.css"
 
 interface MovieListProps {
@@ -16,14 +17,19 @@ export default function MovieGrid({ items, onSelect }: MovieListProps) {
 	return (
 		<div>
 			<ul className={css.grid}>
-				{items.map((item: Movie) => (
-					<li key={item.id} id={item.id} onClick={handleClick}>
-						<div className={css.card}>
-							<img className={css.image} src={`${PIC_URL}${item.poster_path}`} alt={item.title} loading="lazy" />
-							<h2 className={css.title}>{item.title}</h2>
-						</div>
-					</li>
-				))}
+				{items.map((item: Movie) => {
+					const showAdultBadge = item.genre_ids ? isAdultGenre(item.genre_ids, item.adult || false) : false
+
+					return (
+						<li key={item.id} id={item.id.toString()} onClick={handleClick}>
+							<div className={css.card}>
+								{showAdultBadge && <img className={css.adult} src={ADULT_ALERT} alt="18+ Alert" loading="lazy" />}
+								<img className={css.image} src={`${PIC_URL}${item.poster_path}`} alt={item.title} loading="lazy" />
+								<h2 className={css.title}>{item.title}</h2>
+							</div>
+						</li>
+					)
+				})}
 			</ul>
 		</div>
 	)

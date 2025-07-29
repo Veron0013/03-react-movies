@@ -52,3 +52,11 @@
 .card:hover .title {
 	background: rgba(0, 0, 0, 0.8);
 }
+
+.adult {
+	position: absolute;
+	top: 5px;
+	left: 5px;
+	width: 60px;
+	background-color: transparent;
+}

@@ -21,7 +21,6 @@ function App() {
 	const [isModalError, setIsModalError] = useState(false)
 
 	const [isModalOpen, setIsModalOpen] = useState(false)
-	const openModal = () => setIsModalOpen(true)
 
 	const closeModal = () => {
 		setIsModalOpen(false)
@@ -125,7 +124,7 @@ function App() {
 			{isError && createPortal(<ErrorMessage />, document.body)}
 			{isModalError && createPortal(<ErrorMessage />, document.body)}
 			{movies.length > 0 && <MovieGrid items={movies} onSelect={handleClick} />}
-			<button onClick={openModal}>Open modal</button>
+			{/*<button onClick={openModal}>Open modal</button>*/}
 			{isModalOpen && movie && <MovieModal onClose={closeModal} movieData={movie} />}
 		</>
 	)

@@ -31,6 +31,14 @@
 	display: block;
 }
 
+.adult {
+	position: absolute;
+	top: 5px;
+	left: 5px;
+	width: 60px;
+	background-color: transparent;
+}
+
 .content {
 	position: absolute;
 	bottom: 0;
@@ -46,11 +54,54 @@
 	gap: 8px;
 }
 
+.content_wrapper {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 1em;
+	justify-content: space-between;
+}
+
+.movieData {
+	max-width: 300px;
+}
+
+.production_companies {
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	flex-wrap: wrap;
+	text-decoration: none;
+	gap: 0.3em;
+}
+
+.production_companies li {
+	display: flex;
+	gap: 0.3em;
+	align-items: center;
+}
+
+.logo_path {
+	display: block;
+	max-width: 80px;
+	max-height: 40px;
+	background-color: #fff;
+}
+
 .content h2 {
 	margin: 0;
 	font-size: 24px;
 	font-weight: bold;
 	line-height: 1.2;
+	text-align: center;
+	padding-bottom: 0.5em;
+}
+
+.overview {
+	margin: 0;
+	font-size: 16px;
+	line-height: 1.4;
+	padding-bottom: 0.5em;
 }
 
 .content p {

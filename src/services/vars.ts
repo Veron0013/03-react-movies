@@ -3,3 +3,5 @@ export const PIC_URL: string = "https://image.tmdb.org/t/p/original"
 export const FLAG_URL: string = "http://purecatamphetamine.github.io/country-flag-icons/3x2/"
 export const TRANDING_URL: string = "https://api.themoviedb.org/3/trending/movie/week"
 export const DETAILS_URL: string = "https://api.themoviedb.org/3/movie/"
+export const ADULT_ALERT: string = "/18_Plus.svg"
+export const adultGenreIds: number[] = [10749, 53, 9648, 27]

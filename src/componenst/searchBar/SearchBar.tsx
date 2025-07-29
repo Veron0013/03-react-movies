@@ -15,6 +15,7 @@ export default function SearchBar({ onSubmit }: SearchBarProps) {
 
 		const qParams: SearchParams = {
 			query: queryData.trim(),
+			include_adult: true,
 			page: 1,
 			language: "en-US",
 		}
