@@ -5,7 +5,7 @@ import { MyToastType, type Movie } from "../../services/types"
 
 import SearchBar from "../searchBar/SearchBar"
 import ToastMessage from "../../services/ToastMessage"
-import MovieGrid from "../movieGrid/movieGrid"
+import MovieGrid from "../movieGrid/MovieGrid"
 import Loader from "../loader/Loader"
 import ErrorMessage from "../errorMessage/ErrorMessage"
 
