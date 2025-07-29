@@ -1,8 +1,13 @@
-import { toast } from "react-hot-toast"
+import { toast, type ToastPosition } from "react-hot-toast"
 import { MyToastType } from "./types"
 
+interface ToastProps {
+	duration: number
+	position: ToastPosition
+}
+
 export default function ToastMessage(toastType: MyToastType, text: string) {
-	const toastProps = {
+	const toastProps: ToastProps = {
 		duration: 3000,
 		position: "top-right",
 	}

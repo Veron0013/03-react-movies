@@ -2,10 +2,6 @@ import axios from "axios"
 import { type MovieData } from "./types"
 import { URL } from "./vars"
 
-interface MoviesHttpResponse {
-	data: MovieData
-}
-
 export const getMovies = async (query: string, page: number = 1): Promise<MovieData> => {
 	const queryParam = {
 		headers: {
@@ -20,6 +16,6 @@ export const getMovies = async (query: string, page: number = 1): Promise<MovieD
 			query,
 		},
 	}
-	const response = await axios.get<MoviesHttpResponse>(URL, queryParam)
+	const response = await axios.get<MovieData>(URL, queryParam)
 	return response.data
 }
