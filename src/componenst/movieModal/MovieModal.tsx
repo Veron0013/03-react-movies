@@ -21,15 +21,13 @@ export default function MovieModal({ onClose, movieData }: ModalProps) {
 	const locale = new Intl.Locale(movieData.original_language as string)
 	const maximizedLocale = locale.maximize()
 
-	const originaLanguage = !maximizedLocale.region ? "US" : maximizedLocale.region.toLocaleUpperCase()
+	const originaLanguage: string = !maximizedLocale.region ? "US" : maximizedLocale.region.toLocaleUpperCase()
 
 	//18+
-	const showAdultBadge = movieData.genres?.length
-		? isAdultGenre(
-				movieData.genres?.map((g) => g.id),
-				movieData.adult || false
-		  )
-		: false
+	const showAdultBadge: boolean = isAdultGenre(movieData.genres?.map((g) => g.id) ?? [], movieData.adult ?? false)
+
+	//no image
+	const backdropPath: string = movieData.backdrop_path ?? movieData.poster_path ?? ""
 
 	useEffect(() => {
 		const handleKeyDown = (e: KeyboardEvent) => {
@@ -57,6 +55,8 @@ export default function MovieModal({ onClose, movieData }: ModalProps) {
 		return `${formatted} USD`
 	}
 
+	console.log(movieData, showAdultBadge)
+
 	return createPortal(
 		<div className={css.backdrop} role="dialog" aria-modal="true" onClick={handleBackdropClick}>
 			<div className={css.modal}>
@@ -64,7 +64,7 @@ export default function MovieModal({ onClose, movieData }: ModalProps) {
 					&times;
 				</button>
 				{showAdultBadge && <img src={ADULT_ALERT} alt="18+ Alert" className={css.adult} />}
-				<img src={`${PIC_URL}${movieData.backdrop_path}`} alt={movieData.title} className={css.image} />
+				<img src={`${PIC_URL}${backdropPath}`} alt={movieData.title} className={css.image} />
 				<div className={css.content}>
 					<h2>{movieData.title}</h2>
 					<p className={css.overview}>{movieData.overview}</p>
