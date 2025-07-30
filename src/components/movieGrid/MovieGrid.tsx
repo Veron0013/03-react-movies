@@ -1,6 +1,6 @@
 import { isAdultGenre } from "../../services/ApiMovieService"
 import { type Movie } from "../../types/movies"
-import { ADULT_ALERT, PIC_URL } from "../../services/vars"
+import { ADULT_ALERT, PIC_URL } from "../../services/Vars"
 import css from "./MovieGrid.module.css"
 
 interface MovieListProps {

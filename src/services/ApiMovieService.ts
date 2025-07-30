@@ -1,6 +1,6 @@
 import axios from "axios"
 import { type ApiMovieData, type Movie, type SearchParams } from "../types/movies"
-import { URL, TRANDING_URL, DETAILS_URL, adultGenreIds } from "./vars"
+import { URL, TRANDING_URL, DETAILS_URL, adultGenreIds } from "./Vars"
 
 interface QueryParams {
 	headers: {

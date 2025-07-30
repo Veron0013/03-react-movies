@@ -4,14 +4,14 @@ import { getMovieById, getTandingMovies } from "../../services/ApiMovieService"
 import { Toaster } from "react-hot-toast"
 import { MyToastType, type ApiMovieData, type Movie, type SearchParams } from "../../types/movies"
 
-import SearchBar from "../searchBar/SearchBar"
+import SearchBar from "../SearchBar/SearchBar"
 import ToastMessage from "../../services/ToastMessage"
-import MovieGrid from "../movieGrid/MovieGrid"
-import Loader from "../loader/Loader"
-import ErrorMessage from "../errorMessage/ErrorMessage"
+import MovieGrid from "../MovieGrid/MovieGrid"
+import Loader from "../Loader/Loader"
+import ErrorMessage from "../ErrorMessage/ErrorMessage"
 
 import "./App.module.css"
-import MovieModal from "../movieModal/MovieModal"
+import MovieModal from "../MovieModal/MovieModal"
 
 function App() {
 	const [movies, setMovies] = useState<Movie[]>([])

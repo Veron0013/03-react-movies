@@ -1,7 +1,7 @@
 import { createPortal } from "react-dom"
 import { useEffect } from "react"
 import type { Movie } from "../../types/movies"
-import { PIC_URL, FLAG_URL, ADULT_ALERT } from "../../services/vars"
+import { PIC_URL, FLAG_URL, ADULT_ALERT } from "../../services/Vars"
 import css from "./MovieModal.module.css"
 import { isAdultGenre } from "../../services/ApiMovieService"
 
