@@ -6,12 +6,12 @@ import { MyToastType, type ApiMovieData, type Movie, type SearchParams } from ".
 
 import SearchBar from "../SearchBar/SearchBar"
 import ToastMessage from "../../services/ToastMessage"
-import MovieGrid from "../MovieGrid1/MovieGrid"
-import Loader from "../Loader1/Loader"
-import ErrorMessage from "../ErrorMessage1/ErrorMessage"
+import MovieGrid from "../MovieGrid/MovieGrid"
+import Loader from "../Loader/Loader"
+import ErrorMessage from "../ErrorMessage/ErrorMessage"
 
 import "./App.module.css"
-import MovieModal from "../MovieModal1/MovieModal"
+import MovieModal from "../MovieModal/MovieModal"
 
 function App() {
 	const [movies, setMovies] = useState<Movie[]>([])
