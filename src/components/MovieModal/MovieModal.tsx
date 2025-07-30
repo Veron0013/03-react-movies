@@ -29,6 +29,9 @@ export default function MovieModal({ onClose, movie }: MovieModalProps) {
 	//no image
 	const backdropPath: string = movie.backdrop_path ?? movie.poster_path ?? ""
 
+	//show producers
+	const showProduction: boolean = movie.production_companies !== undefined && movie.production_companies.length > 0
+
 	useEffect(() => {
 		const handleKeyDown = (e: KeyboardEvent) => {
 			if (e.key === "Escape") {
@@ -55,7 +58,7 @@ export default function MovieModal({ onClose, movie }: MovieModalProps) {
 		return `${formatted} USD`
 	}
 
-	console.log(movie, showAdultBadge)
+	//console.log(movie, movie.production_companies?.length)
 
 	return createPortal(
 		<div className={css.backdrop} role="dialog" aria-modal="true" onClick={handleBackdropClick}>
@@ -104,11 +107,11 @@ export default function MovieModal({ onClose, movie }: MovieModalProps) {
 								<strong>Votes:</strong> {movie.vote_count?.toFixed(2)}
 							</p>
 						</div>
-						<div className={css.movie}>
-							<strong>Production:</strong>
-							{movie.production_companies?.length && (
+						{showProduction && (
+							<div className={css.movie}>
+								<strong>Production:</strong>
 								<ul className={css.production_companies}>
-									{movie.production_companies.map((el) => (
+									{movie.production_companies?.map((el) => (
 										<li key={el.id}>
 											{el.logo_path && (
 												<img className={css.logo_path} src={`${PIC_URL}${el.logo_path}`} alt={el.name} />
@@ -118,8 +121,8 @@ export default function MovieModal({ onClose, movie }: MovieModalProps) {
 										</li>
 									))}
 								</ul>
-							)}
-						</div>
+							</div>
+						)}
 					</div>
 				</div>
 			</div>
