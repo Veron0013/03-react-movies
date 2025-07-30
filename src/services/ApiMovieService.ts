@@ -1,6 +1,6 @@
 import axios from "axios"
 import { type ApiMovieData, type Movie, type SearchParams } from "../types/movies"
-import { URL, TRANDING_URL, DETAILS_URL, adultGenreIds } from "./Vars"
+import { URL, TRANDING_URL, DETAILS_URL, adultGenreIds } from "./vars"
 
 interface QueryParams {
 	headers: {
@@ -14,7 +14,7 @@ export const getMovies = async (searchParams: SearchParams): Promise<ApiMovieDat
 	return await getApiData(URL, createQueryParams(searchParams))
 }
 
-export const getTandingMovies = async (searchParams: SearchParams): Promise<ApiMovieData> => {
+export const getTrandingMovies = async (searchParams: SearchParams): Promise<ApiMovieData> => {
 	return await getApiData(TRANDING_URL, createQueryParams(searchParams))
 }
 

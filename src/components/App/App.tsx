@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { createPortal } from "react-dom"
-import { getMovieById, getTandingMovies } from "../../services/ApiMovieService"
+import { getMovieById, getTrandingMovies } from "../../services/ApiMovieService"
 import { Toaster } from "react-hot-toast"
 import { MyToastType, type ApiMovieData, type Movie, type SearchParams } from "../../types/movies"
 
@@ -78,7 +78,7 @@ function App() {
 			const qParams: SearchParams = {
 				language: "en-US",
 			}
-			await handleSearch(qParams, getTandingMovies, true)
+			await handleSearch(qParams, getTrandingMovies, true)
 		}
 
 		fetchData()
