@@ -1,5 +1,5 @@
-import { isAdultGenre } from "../../services/ApiMovieService"
-import { type Movie } from "../../types/movies"
+import { isAdultGenre } from "../../services/movieService"
+import { type Movie } from "../../types/movie"
 import { ADULT_ALERT, PIC_URL } from "../../services/vars"
 import css from "./MovieGrid.module.css"
 

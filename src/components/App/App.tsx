@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react"
 import { createPortal } from "react-dom"
-import { getMovieById, getTrandingMovies } from "../../services/ApiMovieService"
+import { getMovieById, getTrandingMovies } from "../../services/movieService"
 import { Toaster } from "react-hot-toast"
-import { MyToastType, type ApiMovieData, type Movie, type SearchParams } from "../../types/movies"
+import { MyToastType, type ApiMovieData, type Movie, type SearchParams } from "../../types/movie"
 
 import SearchBar from "../SearchBar/SearchBar"
-import ToastMessage from "../../services/ToastMessage"
+import toastMessage from "../../services/ToastMessage"
 import MovieGrid from "../MovieGrid/MovieGrid"
 import Loader from "../Loader/Loader"
 import ErrorMessage from "../ErrorMessage/ErrorMessage"
@@ -33,7 +33,7 @@ function App() {
 		isTranding: boolean = false
 	) => {
 		if (!isTranding && !queryParams.query?.length) {
-			ToastMessage(MyToastType.loading, "Please enter your search query.")
+			toastMessage(MyToastType.loading, "Please enter your search query.")
 			return
 		}
 		try {
@@ -43,7 +43,7 @@ function App() {
 			setIsError(false)
 			const data = await callBackFunc(queryParams)
 			if (!data.results.length) {
-				ToastMessage(MyToastType.error, "No movies found for your request.")
+				toastMessage(MyToastType.error, "No movies found for your request.")
 			}
 			setMovies(data.results)
 		} catch {
