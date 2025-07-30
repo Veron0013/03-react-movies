@@ -1,5 +1,5 @@
 import { getMovies } from "../../services/ApiMovieService"
-import type { ApiMovieData, SearchParams } from "../../services/types"
+import type { ApiMovieData, SearchParams } from "../../types"
 import styles from "./SearchBar.module.css"
 
 interface SearchBarProps {

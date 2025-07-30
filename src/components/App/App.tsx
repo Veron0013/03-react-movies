@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { createPortal } from "react-dom"
 import { getMovieById, getTandingMovies } from "../../services/ApiMovieService"
 import { Toaster } from "react-hot-toast"
-import { MyToastType, type ApiMovieData, type Movie, type SearchParams } from "../../services/types"
+import { MyToastType, type ApiMovieData, type Movie, type SearchParams } from "../../types"
 
 import SearchBar from "../searchBar/SearchBar"
 import ToastMessage from "../../services/ToastMessage"
