@@ -5,12 +5,12 @@ import { PIC_URL, FLAG_URL, ADULT_ALERT } from "../../services/vars"
 import css from "./MovieModal.module.css"
 import { isAdultGenre } from "../../services/movieService"
 
-interface ModalProps {
-	movieData: Movie
+interface MovieModalProps {
+	movie: Movie
 	onClose: () => void
 }
 
-export default function MovieModal({ onClose, movieData }: ModalProps) {
+export default function MovieModal({ onClose, movie }: MovieModalProps) {
 	const handleBackdropClick = (event: React.MouseEvent<HTMLDivElement>) => {
 		if (event.target === event.currentTarget) {
 			onClose()
@@ -18,16 +18,16 @@ export default function MovieModal({ onClose, movieData }: ModalProps) {
 	}
 
 	//lang flag
-	const locale = new Intl.Locale(movieData.original_language as string)
+	const locale = new Intl.Locale(movie.original_language as string)
 	const maximizedLocale = locale.maximize()
 
 	const originaLanguage: string = !maximizedLocale.region ? "US" : maximizedLocale.region.toLocaleUpperCase()
 
 	//18+
-	const showAdultBadge: boolean = isAdultGenre(movieData.genres?.map((g) => g.id) ?? [], movieData.adult ?? false)
+	const showAdultBadge: boolean = isAdultGenre(movie.genres?.map((g) => g.id) ?? [], movie.adult ?? false)
 
 	//no image
-	const backdropPath: string = movieData.backdrop_path ?? movieData.poster_path ?? ""
+	const backdropPath: string = movie.backdrop_path ?? movie.poster_path ?? ""
 
 	useEffect(() => {
 		const handleKeyDown = (e: KeyboardEvent) => {
@@ -55,7 +55,7 @@ export default function MovieModal({ onClose, movieData }: ModalProps) {
 		return `${formatted} USD`
 	}
 
-	console.log(movieData, showAdultBadge)
+	console.log(movie, showAdultBadge)
 
 	return createPortal(
 		<div className={css.backdrop} role="dialog" aria-modal="true" onClick={handleBackdropClick}>
@@ -64,51 +64,51 @@ export default function MovieModal({ onClose, movieData }: ModalProps) {
 					&times;
 				</button>
 				{showAdultBadge && <img src={ADULT_ALERT} alt="18+ Alert" className={css.adult} />}
-				<img src={`${PIC_URL}${backdropPath}`} alt={movieData.title} className={css.image} />
+				<img src={`${PIC_URL}${backdropPath}`} alt={movie.title} className={css.image} />
 				<div className={css.content}>
-					<h2>{movieData.title}</h2>
-					<p className={css.overview}>{movieData.overview}</p>
+					<h2>{movie.title}</h2>
+					<p className={css.overview}>{movie.overview}</p>
 					<div className={css.content_wrapper}>
-						<div className={css.movieData}>
+						<div className={css.movie}>
 							<p>
 								<strong>Genres: </strong>
-								{!movieData.genres?.length ? "Not described" : movieData.genres?.map((g) => g.name).join(", ")}
+								{!movie.genres?.length ? "Not described" : movie.genres?.map((g) => g.name).join(", ")}
 							</p>
 							<p>
-								<strong>Release Date:</strong> {movieData.release_date}
+								<strong>Release Date:</strong> {movie.release_date}
 							</p>
 							<p>
 								<strong>Original language: </strong>
 								<img
-									alt={movieData.original_language}
-									title={movieData.original_language}
+									alt={movie.original_language}
+									title={movie.original_language}
 									src={`${FLAG_URL}${originaLanguage}.svg`}
 									width="20px"
 								/>
 							</p>
 							<p>
 								<strong>Budget: </strong>
-								{movieData.budget && movieData.budget > 0 ? formatDigits(movieData.budget) : "No budget reported"}
+								{movie.budget && movie.budget > 0 ? formatDigits(movie.budget) : "No budget reported"}
 							</p>
 							<p>
 								<strong>Revenue: </strong>
-								{movieData.revenue && movieData.revenue > 0 ? formatDigits(movieData.revenue) : "No revenue reported"}
+								{movie.revenue && movie.revenue > 0 ? formatDigits(movie.revenue) : "No revenue reported"}
 							</p>
 							<p>
-								<strong>Rating:</strong> {movieData.vote_average?.toFixed(2)}
+								<strong>Rating:</strong> {movie.vote_average?.toFixed(2)}
 							</p>
 							<p>
-								<strong>Popularity:</strong> {movieData.popularity?.toFixed(2)}
+								<strong>Popularity:</strong> {movie.popularity?.toFixed(2)}
 							</p>
 							<p>
-								<strong>Votes:</strong> {movieData.vote_count?.toFixed(2)}
+								<strong>Votes:</strong> {movie.vote_count?.toFixed(2)}
 							</p>
 						</div>
-						<div className={css.movieData}>
+						<div className={css.movie}>
 							<strong>Production:</strong>
-							{movieData.production_companies?.length && (
+							{movie.production_companies?.length && (
 								<ul className={css.production_companies}>
-									{movieData.production_companies.map((el) => (
+									{movie.production_companies.map((el) => (
 										<li key={el.id}>
 											{el.logo_path && (
 												<img className={css.logo_path} src={`${PIC_URL}${el.logo_path}`} alt={el.name} />

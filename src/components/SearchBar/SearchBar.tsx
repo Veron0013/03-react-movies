@@ -1,5 +1,5 @@
-import { getMovies } from "../../services/movieService"
-import type { ApiMovieData, SearchParams } from "../../types/movie"
+import { getMovies, type ApiMovieData, type SearchParams } from "../../services/movieService"
+import toastMessage, { MyToastType } from "../../services/ToastMessage"
 import styles from "./SearchBar.module.css"
 
 interface SearchBarProps {
@@ -12,6 +12,11 @@ interface SearchBarProps {
 export default function SearchBar({ onSubmit }: SearchBarProps) {
 	const handleSubmit = (formData: FormData) => {
 		const queryData = formData.get("query") as string
+
+		if (!queryData.trim().length) {
+			toastMessage(MyToastType.loading, "Please enter your search query.")
+			return
+		}
 
 		const qParams: SearchParams = {
 			query: queryData.trim(),

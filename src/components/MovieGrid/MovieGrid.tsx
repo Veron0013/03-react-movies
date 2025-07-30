@@ -3,12 +3,12 @@ import { type Movie } from "../../types/movie"
 import { ADULT_ALERT, PIC_URL } from "../../services/vars"
 import css from "./MovieGrid.module.css"
 
-interface MovieListProps {
+interface MovieGridProps {
 	onSelect: (movieId: number) => void
-	items: Movie[]
+	movies: Movie[]
 }
 
-export default function MovieGrid({ items, onSelect }: MovieListProps) {
+export default function MovieGrid({ movies, onSelect }: MovieGridProps) {
 	const handleClick = (e: React.MouseEvent<HTMLLIElement>) => {
 		const movie_id: number = Number(e.currentTarget.id)
 		return onSelect(movie_id)
@@ -17,7 +17,7 @@ export default function MovieGrid({ items, onSelect }: MovieListProps) {
 	return (
 		<div>
 			<ul className={css.grid}>
-				{items.map((item: Movie) => {
+				{movies.map((item: Movie) => {
 					const showAdultBadge = item.genre_ids ? isAdultGenre(item.genre_ids, item.adult || false) : false
 
 					return (

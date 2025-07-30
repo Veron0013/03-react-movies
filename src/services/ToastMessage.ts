@@ -1,5 +1,11 @@
 import { toast, type ToastPosition } from "react-hot-toast"
-import { MyToastType } from "../types/movie"
+
+export enum MyToastType {
+	success = "success",
+	error = "error",
+	loading = "loading",
+	custom = "custom",
+}
 
 interface ToastProps {
 	duration: number

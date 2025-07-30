@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react"
 import { createPortal } from "react-dom"
-import { getMovieById, getTrandingMovies } from "../../services/movieService"
+import { getMovieById, getTrandingMovies, type ApiMovieData, type SearchParams } from "../../services/movieService"
 import { Toaster } from "react-hot-toast"
-import { MyToastType, type ApiMovieData, type Movie, type SearchParams } from "../../types/movie"
+import { type Movie } from "../../types/movie"
 
 import SearchBar from "../SearchBar/SearchBar"
-import toastMessage from "../../services/ToastMessage"
+import toastMessage, { MyToastType } from "../../services/ToastMessage"
 import MovieGrid from "../MovieGrid/MovieGrid"
 import Loader from "../Loader/Loader"
 import ErrorMessage from "../ErrorMessage/ErrorMessage"
@@ -29,13 +29,8 @@ function App() {
 
 	const handleSearch = async (
 		queryParams: SearchParams,
-		callBackFunc: (searchParams: SearchParams) => Promise<ApiMovieData>,
-		isTranding: boolean = false
+		callBackFunc: (searchParams: SearchParams) => Promise<ApiMovieData>
 	) => {
-		if (!isTranding && !queryParams.query?.length) {
-			toastMessage(MyToastType.loading, "Please enter your search query.")
-			return
-		}
 		try {
 			setMovies([])
 			setMovie(null)
@@ -73,17 +68,19 @@ function App() {
 		}
 	}
 
+	///завантаження трендів при старті
 	useEffect(() => {
 		const fetchData = async () => {
 			const qParams: SearchParams = {
 				language: "en-US",
 			}
-			await handleSearch(qParams, getTrandingMovies, true)
+			await handleSearch(qParams, getTrandingMovies)
 		}
 
 		fetchData()
 	}, [])
 
+	///modal error
 	useEffect(() => {
 		if (isModalError) {
 			const timer = setTimeout(() => setIsModalError(false), 3000)
@@ -92,6 +89,7 @@ function App() {
 	}, [isModalError])
 
 	useEffect(() => {
+		/// Mobile Back закриває модалку а не виходить із боаузера
 		if (isModalOpen) {
 			// Додаємо новий запис у історію
 			window.history.pushState({ modal: true }, "")
@@ -100,14 +98,11 @@ function App() {
 				// Коли користувач тисне "назад"
 				setIsModalOpen(false)
 			}
-
 			// Слухаємо назад
 			window.addEventListener("popstate", handlePopState)
-
 			// Очищення при закритті модалки
 			return () => {
 				window.removeEventListener("popstate", handlePopState)
-
 				// Повертаємося назад в історії, щоб не накопичувати зайвого
 				if (window.history.state?.modal) {
 					window.history.back()
@@ -123,9 +118,9 @@ function App() {
 			{isLoading && createPortal(<Loader />, document.body)}
 			{isError && createPortal(<ErrorMessage />, document.body)}
 			{isModalError && createPortal(<ErrorMessage />, document.body)}
-			{movies.length > 0 && <MovieGrid items={movies} onSelect={handleClick} />}
-			{/*<button onClick={openModal}>Open modal</button>*/}
-			{isModalOpen && movie && <MovieModal onClose={closeModal} movieData={movie} />}
+			{movies.length > 0 && <MovieGrid movies={movies} onSelect={handleClick} />}
+			{/*<button onClick={showMore}>Show more</button>*/}
+			{isModalOpen && movie && <MovieModal onClose={closeModal} movie={movie} />}
 		</>
 	)
 }
