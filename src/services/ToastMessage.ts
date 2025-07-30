@@ -1,5 +1,5 @@
 import { toast, type ToastPosition } from "react-hot-toast"
-import { MyToastType } from "../types"
+import { MyToastType } from "../types/movies"
 
 interface ToastProps {
 	duration: number
