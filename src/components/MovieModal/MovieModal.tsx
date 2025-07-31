@@ -17,21 +17,7 @@ export default function MovieModal({ onClose, movie }: MovieModalProps) {
 		}
 	}
 
-	//lang flag
-	const locale = new Intl.Locale(movie.original_language as string)
-	const maximizedLocale = locale.maximize()
-
-	const originaLanguage: string = !maximizedLocale.region ? "US" : maximizedLocale.region.toLocaleUpperCase()
-
-	//18+
-	const showAdultBadge: boolean = isAdultGenre(movie.genres?.map((g) => g.id) ?? [], movie.adult ?? false)
-
-	//no image
-	const backdropPath: string = movie.backdrop_path ?? movie.poster_path ?? ""
-
-	//show producers
-	const showProduction: boolean = movie.production_companies !== undefined && movie.production_companies.length > 0
-
+	//escape close
 	useEffect(() => {
 		const handleKeyDown = (e: KeyboardEvent) => {
 			if (e.key === "Escape") {
@@ -47,6 +33,21 @@ export default function MovieModal({ onClose, movie }: MovieModalProps) {
 			document.body.style.overflow = ""
 		}
 	}, [onClose])
+
+	//lang flag
+	const locale = new Intl.Locale(movie.original_language as string)
+	const maximizedLocale = locale.maximize()
+
+	const originaLanguage: string = !maximizedLocale.region ? "US" : maximizedLocale.region.toLocaleUpperCase()
+
+	//18+
+	const showAdultBadge: boolean = isAdultGenre(movie.genres?.map((g) => g.id) ?? [], movie.adult ?? false)
+
+	//no image
+	const backdropPath: string = movie.backdrop_path ?? movie.poster_path ?? ""
+
+	//show producers
+	const showProduction: boolean = movie.production_companies !== undefined && movie.production_companies.length > 0
 
 	const formatDigits = (num: number): string => {
 		const formatted = new Intl.NumberFormat("fr-FR", {

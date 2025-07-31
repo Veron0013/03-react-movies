@@ -1,12 +1,8 @@
-import { getMovies, type ApiMovieData, type SearchParams } from "../../services/movieService"
-import toastMessage, { MyToastType } from "../../services/ToastMessage"
+import toastMessage, { MyToastType } from "../../services/toastMessage"
 import styles from "./SearchBar.module.css"
 
 interface SearchBarProps {
-	onSubmit: (
-		queryParams: SearchParams,
-		callBackFunc: (searchParams: SearchParams) => Promise<ApiMovieData>
-	) => void | Promise<void>
+	onSubmit: (query: string) => void
 }
 
 export default function SearchBar({ onSubmit }: SearchBarProps) {
@@ -17,14 +13,7 @@ export default function SearchBar({ onSubmit }: SearchBarProps) {
 			toastMessage(MyToastType.loading, "Please enter your search query.")
 			return
 		}
-
-		const qParams: SearchParams = {
-			query: queryData.trim(),
-			include_adult: true,
-			page: 1,
-			language: "en-US",
-		}
-		onSubmit(qParams, getMovies)
+		onSubmit(queryData.trim())
 	}
 
 	return (
