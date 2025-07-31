@@ -19,7 +19,7 @@ export interface ApiMovieData {
 	total_results: number
 }
 
-interface QueryParams {
+interface ApiQueryParams {
 	headers: {
 		accept: "application/json"
 		Authorization: string
@@ -39,7 +39,12 @@ export const getMovieById = async (searchParams: SearchParams): Promise<Movie> =
 	return await getApiData(`${DETAILS_URL}${searchParams.movie_id}`, createQueryParams(searchParams))
 }
 
-const createQueryParams = (searchParams: SearchParams): QueryParams => ({
+export const isAdultGenre = (genreId: number[], isAdult: boolean): boolean => {
+	const isAdultGenre = genreId.some((id) => adultGenreIds.includes(id))
+	return isAdult || isAdultGenre
+}
+
+const createQueryParams = (searchParams: SearchParams): ApiQueryParams => ({
 	headers: {
 		accept: "application/json",
 		Authorization: `Bearer ${import.meta.env.VITE_TMDB_TOKEN}`,
@@ -47,12 +52,7 @@ const createQueryParams = (searchParams: SearchParams): QueryParams => ({
 	params: { ...searchParams },
 })
 
-const getApiData = async <T>(url: string, queryParams: QueryParams): Promise<T> => {
+const getApiData = async <T>(url: string, queryParams: ApiQueryParams): Promise<T> => {
 	const response = await axios.get<T>(url, queryParams)
 	return response.data
-}
-
-export const isAdultGenre = (genreId: number[], isAdult: boolean): boolean => {
-	const isAdultGenre = genreId.some((id) => adultGenreIds.includes(id))
-	return isAdult || isAdultGenre
 }

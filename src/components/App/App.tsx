@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import { createPortal } from "react-dom"
+import { useLocalStorage } from "@uidotdev/usehooks"
 import {
 	getMovieById,
 	getMovies,
@@ -27,26 +28,43 @@ function App() {
 	const [isModalError, setIsModalError] = useState(false)
 
 	const [isModalOpen, setIsModalOpen] = useState(false)
+	const [isShowMore, setShowMore] = useState(false)
+	const [currentPage, setCurrentPage] = useState<number>(1)
+
+	const [storageQuery, setStorageQuery] = useLocalStorage("storageQuery", "")
 
 	const closeModal = () => {
 		setIsModalOpen(false)
 		setMovie(null)
 	}
 
-	const handleSearch = async (query: string) => {
+	const createQueryParams = (query: string): SearchParams => {
 		const qParams: SearchParams = {
 			query,
 			include_adult: true,
-			page: 1,
+			page: currentPage,
 			language: "en-US",
 		}
+		return qParams
+	}
+
+	const handleSearch = async (query: string) => {
+		setStorageQuery(query)
+		const qParams: SearchParams = createQueryParams(query)
 		await renderMovies(qParams, getMovies)
+	}
+
+	const handleShowMore = async () => {
+		setShowMore(false)
+		setCurrentPage(currentPage + 1)
+		await renderMovies(createQueryParams(storageQuery), getMovies)
 	}
 
 	//рендер списку
 	const renderMovies = async (
 		queryParams: SearchParams,
-		callBackFunc: (searchParams: SearchParams) => Promise<ApiMovieData>
+		callBackFunc: (searchParams: SearchParams) => Promise<ApiMovieData>,
+		trendingData: boolean = false
 	) => {
 		try {
 			setMovies([])
@@ -58,6 +76,8 @@ function App() {
 				toastMessage(MyToastType.error, "No movies found for your request.")
 			}
 			setMovies(data.results)
+			setShowMore((!trendingData && currentPage < data.total_pages) || false)
+			console.log(data, trendingData)
 		} catch {
 			setIsError(true)
 		} finally {
@@ -91,7 +111,7 @@ function App() {
 			const qParams: SearchParams = {
 				language: "en-US",
 			}
-			await renderMovies(qParams, getTrandingMovies)
+			await renderMovies(qParams, getTrandingMovies, true)
 		}
 
 		fetchData()
@@ -136,7 +156,7 @@ function App() {
 			{isError && createPortal(<ErrorMessage />, document.body)}
 			{isModalError && createPortal(<ErrorMessage />, document.body)}
 			{movies.length > 0 && <MovieGrid movies={movies} onSelect={handleClick} />}
-			{/*<button onClick={showMore}>Show more</button>*/}
+			{isShowMore && <button onClick={handleShowMore}>Show more</button>}
 			{isModalOpen && movie && <MovieModal onClose={closeModal} movie={movie} />}
 		</>
 	)
