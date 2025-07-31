@@ -29,6 +29,7 @@ function App() {
 
 	const [isModalOpen, setIsModalOpen] = useState(false)
 	const [isShowMore, setShowMore] = useState(false)
+	const [isPagination, setPaginaion] = useState(false)
 	const [currentPage, setCurrentPage] = useState<number>(1)
 
 	const [storageQuery, setStorageQuery] = useLocalStorage("storageQuery", "")
@@ -38,26 +39,30 @@ function App() {
 		setMovie(null)
 	}
 
-	const createQueryParams = (query: string): SearchParams => {
+	const createQueryParams = (query: string, page: number = currentPage): SearchParams => {
 		const qParams: SearchParams = {
 			query,
 			include_adult: true,
-			page: currentPage,
+			page,
 			language: "en-US",
 		}
 		return qParams
 	}
 
 	const handleSearch = async (query: string) => {
+		setMovies([])
+		setPaginaion(false)
 		setStorageQuery(query)
 		const qParams: SearchParams = createQueryParams(query)
 		await renderMovies(qParams, getMovies)
 	}
 
 	const handleShowMore = async () => {
+		setPaginaion(true)
 		setShowMore(false)
-		setCurrentPage(currentPage + 1)
-		await renderMovies(createQueryParams(storageQuery), getMovies)
+		const nextPage: number = currentPage + 1
+		setCurrentPage(nextPage)
+		await renderMovies(createQueryParams(storageQuery, nextPage), getMovies)
 	}
 
 	//рендер списку
@@ -67,7 +72,6 @@ function App() {
 		trendingData: boolean = false
 	) => {
 		try {
-			setMovies([])
 			setMovie(null)
 			setIsLoading(true)
 			setIsError(false)
@@ -75,9 +79,13 @@ function App() {
 			if (!data.results.length) {
 				toastMessage(MyToastType.error, "No movies found for your request.")
 			}
-			setMovies(data.results)
+			if (isPagination) {
+				setMovies((prev) => [...prev, ...data.results])
+			} else {
+				setMovies(data.results)
+			}
 			setShowMore((!trendingData && currentPage < data.total_pages) || false)
-			console.log(data, trendingData)
+			//console.log(data, trendingData)
 		} catch {
 			setIsError(true)
 		} finally {

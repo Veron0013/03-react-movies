@@ -13,7 +13,6 @@ export default function MovieGrid({ movies, onSelect }: MovieGridProps) {
 		const movie_id: number = Number(e.currentTarget.id)
 		return onSelect(movie_id)
 	}
-
 	return (
 		<div>
 			<ul className={css.grid}>
