@@ -105,28 +105,28 @@ function App() {
 		}
 	}, [isModalError])
 
-	//useEffect(() => {
-	//	/// Mobile Back закриває модалку а не виходить із боаузера
-	//	if (isModalOpen) {
-	//		// Додаємо новий запис у історію
-	//		window.history.pushState({ modal: true }, "")
+	useEffect(() => {
+		/// Mobile Back закриває модалку а не виходить із боаузера
+		if (isModalOpen) {
+			// Додаємо новий запис у історію
+			window.history.pushState({ modal: true }, "")
 
-	//		const handlePopState = () => {
-	//			// Коли користувач тисне "назад"
-	//			setIsModalOpen(false)
-	//		}
-	//		// Слухаємо назад
-	//		window.addEventListener("popstate", handlePopState)
-	//		// Очищення при закритті модалки
-	//		return () => {
-	//			window.removeEventListener("popstate", handlePopState)
-	//			// Повертаємося назад в історії, щоб не накопичувати зайвого
-	//			if (window.history.state?.modal) {
-	//				window.history.back()
-	//			}
-	//		}
-	//	}
-	//}, [isModalOpen])
+			const handlePopState = () => {
+				// Коли користувач тисне "назад"
+				setIsModalOpen(false)
+			}
+			// Слухаємо назад
+			window.addEventListener("popstate", handlePopState)
+			// Очищення при закритті модалки
+			return () => {
+				window.removeEventListener("popstate", handlePopState)
+				// Повертаємося назад в історії, щоб не накопичувати зайвого
+				if (window.history.state?.modal) {
+					window.history.back()
+				}
+			}
+		}
+	}, [isModalOpen])
 
 	return (
 		<>
