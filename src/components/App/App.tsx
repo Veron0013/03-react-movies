@@ -11,7 +11,7 @@ import { Toaster } from "react-hot-toast"
 import { type Movie } from "../../types/movie"
 
 import SearchBar from "../SearchBar/SearchBar"
-import toastMessage, { MyToastType } from "../../services/toastMessage"
+import toastMessage, { MyToastType } from "../../services/messageService"
 import MovieGrid from "../MovieGrid/MovieGrid"
 import Loader from "../Loader/Loader"
 import ErrorMessage from "../ErrorMessage/ErrorMessage"

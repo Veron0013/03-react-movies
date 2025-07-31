@@ -1,4 +1,4 @@
-import toastMessage, { MyToastType } from "../../services/toastMessage"
+import toastMessage, { MyToastType } from "../../services/messageService"
 import styles from "./SearchBar.module.css"
 
 interface SearchBarProps {
