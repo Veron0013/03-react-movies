@@ -4,4 +4,5 @@ export const FLAG_URL: string = "http://purecatamphetamine.github.io/country-fla
 export const TRANDING_URL: string = "https://api.themoviedb.org/3/trending/movie/week"
 export const DETAILS_URL: string = "https://api.themoviedb.org/3/movie/"
 export const ADULT_ALERT: string = "/18_Plus.svg"
+export const NO_IMAGE: string = "/noImage.webp"
 export const adultGenreIds: number[] = [10749, 53, 9648, 27]

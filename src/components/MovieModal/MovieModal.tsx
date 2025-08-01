@@ -1,7 +1,7 @@
 import { createPortal } from "react-dom"
 import { useEffect } from "react"
 import type { Movie } from "../../types/movie"
-import { PIC_URL, FLAG_URL, ADULT_ALERT } from "../../services/vars"
+import { PIC_URL, FLAG_URL, ADULT_ALERT, NO_IMAGE } from "../../services/vars"
 import css from "./MovieModal.module.css"
 import { isAdultGenre } from "../../services/movieService"
 
@@ -44,7 +44,8 @@ export default function MovieModal({ onClose, movie }: MovieModalProps) {
 	const showAdultBadge: boolean = isAdultGenre(movie.genres?.map((g) => g.id) ?? [], movie.adult ?? false)
 
 	//no image
-	const backdropPath: string = movie.backdrop_path ?? movie.poster_path ?? ""
+	const backdropPath: string =
+		movie.backdrop_path || movie.poster_path ? PIC_URL + (movie.backdrop_path ?? movie.poster_path) : NO_IMAGE
 
 	//show producers
 	const showProduction: boolean = movie.production_companies !== undefined && movie.production_companies.length > 0
@@ -68,7 +69,7 @@ export default function MovieModal({ onClose, movie }: MovieModalProps) {
 					&times;
 				</button>
 				{showAdultBadge && <img src={ADULT_ALERT} alt="18+ Alert" className={css.adult} />}
-				<img src={`${PIC_URL}${backdropPath}`} alt={movie.title} className={css.image} />
+				<img src={backdropPath} alt={movie.title} className={css.image} />
 				<div className={css.content}>
 					<h2>{movie.title}</h2>
 					<p className={css.overview}>{movie.overview}</p>

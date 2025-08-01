@@ -44,7 +44,7 @@ function App() {
 			query,
 			include_adult: true,
 			page,
-			language: "en-US",
+			language: "uk-UA",
 		}
 		return qParams
 	}
@@ -96,7 +96,7 @@ function App() {
 	const handleClick = async (movie_id: number) => {
 		const qParams: SearchParams = {
 			movie_id,
-			language: "en-US",
+			language: "uk-UA",
 		}
 		try {
 			setIsLoading(true)
@@ -117,7 +117,7 @@ function App() {
 	useEffect(() => {
 		const fetchData = async () => {
 			const qParams: SearchParams = {
-				language: "en-US",
+				language: "uk-UA",
 			}
 			await renderMovies(qParams, getTrandingMovies, true)
 		}
@@ -156,6 +156,8 @@ function App() {
 			}
 		}
 	}, [isModalOpen])
+
+	console.log(movies)
 
 	return (
 		<>
