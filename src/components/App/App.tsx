@@ -1,6 +1,6 @@
+import { useLocalStorage } from "@uidotdev/usehooks"
 import { useEffect, useState } from "react"
 import { createPortal } from "react-dom"
-import { useLocalStorage } from "@uidotdev/usehooks"
 import {
 	getMovieById,
 	getMovies,
@@ -8,17 +8,18 @@ import {
 	type ApiMovieData,
 	type SearchParams,
 } from "../../services/movieService"
+import MovieGrid from "../MovieGrid/MovieGrid"
 import { Toaster } from "react-hot-toast"
 import { type Movie } from "../../types/movie"
 
 import SearchBar from "../SearchBar/SearchBar"
 import toastMessage, { MyToastType } from "../../services/messageService"
-import MovieGrid from "../MovieGrid/MovieGrid"
 import Loader from "../Loader/Loader"
 import ErrorMessage from "../ErrorMessage/ErrorMessage"
 
 import "./App.module.css"
 import MovieModal from "../MovieModal/MovieModal"
+import LangMenu from "../LangMenu/LangMenu"
 
 function App() {
 	const [movies, setMovies] = useState<Movie[]>([])
@@ -28,11 +29,13 @@ function App() {
 	const [isModalError, setIsModalError] = useState(false)
 
 	const [isModalOpen, setIsModalOpen] = useState(false)
+	const [isMenulOpen, setIsMenulOpen] = useState(false)
 	const [isShowMore, setShowMore] = useState(false)
 	const [isPagination, setPaginaion] = useState(false)
 	const [currentPage, setCurrentPage] = useState<number>(1)
 
 	const [storageQuery, setStorageQuery] = useLocalStorage("storageQuery", "")
+	const [sysLang, setSysLang] = useLocalStorage("sysLang", "uk-UA")
 
 	const closeModal = () => {
 		setIsModalOpen(false)
@@ -44,7 +47,7 @@ function App() {
 			query,
 			include_adult: true,
 			page,
-			language: "uk-UA",
+			language: sysLang,
 		}
 		return qParams
 	}
@@ -96,7 +99,7 @@ function App() {
 	const handleClick = async (movie_id: number) => {
 		const qParams: SearchParams = {
 			movie_id,
-			language: "uk-UA",
+			language: sysLang,
 		}
 		try {
 			setIsLoading(true)
@@ -112,12 +115,17 @@ function App() {
 			setIsLoading(false)
 		}
 	}
-
+	const handleShowMenu = (langValue: string) => {
+		setIsMenulOpen(false)
+		setSysLang(langValue)
+		window.location.reload()
+		console.log(langValue)
+	}
 	///завантаження трендів при старті
 	useEffect(() => {
 		const fetchData = async () => {
 			const qParams: SearchParams = {
-				language: "uk-UA",
+				language: sysLang,
 			}
 			await renderMovies(qParams, getTrandingMovies, true)
 		}
@@ -157,12 +165,13 @@ function App() {
 		}
 	}, [isModalOpen])
 
-	console.log(movies)
+	//console.log(movies)
 
 	return (
 		<>
 			<Toaster />
 			<SearchBar onSubmit={handleSearch} />
+			{isMenulOpen && <LangMenu onSelect={handleShowMenu} />}
 			{isLoading && createPortal(<Loader />, document.body)}
 			{isError && createPortal(<ErrorMessage />, document.body)}
 			{isModalError && createPortal(<ErrorMessage />, document.body)}

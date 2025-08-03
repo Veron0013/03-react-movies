@@ -50,6 +50,10 @@ export default function MovieModal({ onClose, movie }: MovieModalProps) {
 	//show producers
 	const showProduction: boolean = movie.production_companies !== undefined && movie.production_companies.length > 0
 
+	// title
+	const movieTitle: string =
+		movie.title === movie.original_title ? movie.title : `${movie.title} (${movie.original_title})`
+
 	const formatDigits = (num: number): string => {
 		const formatted = new Intl.NumberFormat("fr-FR", {
 			style: "decimal",
@@ -57,7 +61,7 @@ export default function MovieModal({ onClose, movie }: MovieModalProps) {
 			maximumFractionDigits: 2,
 		}).format(num)
 
-		return `${formatted} USD`
+		return `$ ${formatted}`
 	}
 
 	//console.log(movie, movie.production_companies?.length)
@@ -71,7 +75,7 @@ export default function MovieModal({ onClose, movie }: MovieModalProps) {
 				{showAdultBadge && <img src={ADULT_ALERT} alt="18+ Alert" className={css.adult} />}
 				<img src={backdropPath} alt={movie.title} className={css.image} />
 				<div className={css.content}>
-					<h2>{movie.title}</h2>
+					<h2>{movieTitle}</h2>
 					<p className={css.overview}>{movie.overview}</p>
 					<div className={css.content_wrapper}>
 						<div className={css.movie}>

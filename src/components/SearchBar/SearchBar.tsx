@@ -1,5 +1,6 @@
 import toastMessage, { MyToastType } from "../../services/messageService"
 import styles from "./SearchBar.module.css"
+import textes from "../../services/translation.json"
 
 interface SearchBarProps {
 	onSubmit: (query: string) => void
@@ -16,11 +17,13 @@ export default function SearchBar({ onSubmit }: SearchBarProps) {
 		onSubmit(queryData.trim())
 	}
 
+	const translateText = textes["uk-UA"]
+
 	return (
 		<header className={styles.header}>
 			<div className={styles.container}>
 				<a className={styles.link} href="https://www.themoviedb.org/" target="_blank" rel="noopener noreferrer">
-					Powered by TMDB
+					{`${translateText.searchBar_poweredBy} TMDB`}
 				</a>
 				<form action={handleSubmit} className={styles.form}>
 					<input
@@ -28,11 +31,11 @@ export default function SearchBar({ onSubmit }: SearchBarProps) {
 						type="text"
 						name="query"
 						autoComplete="off"
-						placeholder="Search movies..."
+						placeholder={translateText.searchBar_placeholder}
 						autoFocus
 					/>
 					<button className={styles.button} type="submit">
-						Search
+						{translateText.searchBar_Button}
 					</button>
 				</form>
 			</div>

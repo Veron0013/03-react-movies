@@ -1,0 +1,22 @@
+{
+	"uk-UA": {
+		"searchBar_lang": "UA",
+		"searchBar_poweredBy": "За підтримки",
+		"searchBar_placeholder": "Шукати фільми...",
+		"searchBar_Button": "Пошук",
+		"loader_text": "Зачекайте, будь ласка, завантажуємо контент...",
+		"error_main_text": "Виникла помилка при завантаженні, спробуйте ще раз...",
+		"toast_bad_request": "За заним запитом не знайдено фільмів.",
+		"toast_no_request": "Введіть, будь ласка, запит для пошуку фільмів."
+	},
+	"en-US": {
+		"searchBar_lang": "EN",
+		"searchBar_poweredBy": "Powered by",
+		"searchBar_placeholder": "Search movies...",
+		"searchBar_Button": "Search",
+		"loader_text": "Loading content, please wait...",
+		"error_main_text": "There was an error, please try again...",
+		"toast_bad_request": "No movies found for your request.",
+		"toast_no_request": "Please enter your search query."
+	}
+}
