@@ -4,6 +4,7 @@ import type { Movie } from "../../types/movie"
 import { PIC_URL, FLAG_URL, ADULT_ALERT, NO_IMAGE } from "../../services/vars"
 import css from "./MovieModal.module.css"
 import { isAdultGenre } from "../../services/movieService"
+import { useLanguage } from "../LanguageContext/LanguageContext"
 
 interface MovieModalProps {
 	movie: Movie
@@ -64,6 +65,8 @@ export default function MovieModal({ onClose, movie }: MovieModalProps) {
 		return `$ ${formatted}`
 	}
 
+	const { translationTexts } = useLanguage()
+
 	//console.log(movie, movie.production_companies?.length)
 
 	return createPortal(
@@ -80,14 +83,14 @@ export default function MovieModal({ onClose, movie }: MovieModalProps) {
 					<div className={css.content_wrapper}>
 						<div className={css.movie}>
 							<p>
-								<strong>Genres: </strong>
+								<strong>{translationTexts.genres}: </strong>
 								{!movie.genres?.length ? "Not described" : movie.genres?.map((g) => g.name).join(", ")}
 							</p>
 							<p>
-								<strong>Release Date:</strong> {movie.release_date}
+								<strong>{translationTexts.releaseDate}:</strong> {movie.release_date}
 							</p>
 							<p>
-								<strong>Original language: </strong>
+								<strong>{translationTexts.originalLanguage}: </strong>
 								<img
 									alt={movie.original_language}
 									title={movie.original_language}
@@ -96,26 +99,26 @@ export default function MovieModal({ onClose, movie }: MovieModalProps) {
 								/>
 							</p>
 							<p>
-								<strong>Budget: </strong>
-								{movie.budget && movie.budget > 0 ? formatDigits(movie.budget) : "No budget reported"}
+								<strong>{translationTexts.budget}: </strong>
+								{movie.budget && movie.budget > 0 ? formatDigits(movie.budget) : translationTexts.noBudget}
 							</p>
 							<p>
-								<strong>Revenue: </strong>
-								{movie.revenue && movie.revenue > 0 ? formatDigits(movie.revenue) : "No revenue reported"}
+								<strong>{translationTexts.revenue}: </strong>
+								{movie.revenue && movie.revenue > 0 ? formatDigits(movie.revenue) : translationTexts.noRevenue}
 							</p>
 							<p>
-								<strong>Rating:</strong> {movie.vote_average?.toFixed(2)}
+								<strong>{translationTexts.rating}: </strong> {movie.vote_average?.toFixed(2)}
 							</p>
 							<p>
-								<strong>Popularity:</strong> {movie.popularity?.toFixed(2)}
+								<strong>{translationTexts.popularity}: </strong> {movie.popularity?.toFixed(2)}
 							</p>
 							<p>
-								<strong>Votes:</strong> {movie.vote_count?.toFixed(2)}
+								<strong>{translationTexts.votes}: </strong> {movie.vote_count?.toFixed(2)}
 							</p>
 						</div>
 						{showProduction && (
 							<div className={css.movie}>
-								<strong>Production:</strong>
+								<strong>{translationTexts.production}:</strong>
 								<ul className={css.production_companies}>
 									{movie.production_companies?.map((el) => (
 										<li key={el.id}>

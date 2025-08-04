@@ -20,6 +20,7 @@ import ErrorMessage from "../ErrorMessage/ErrorMessage"
 import "./App.module.css"
 import MovieModal from "../MovieModal/MovieModal"
 import LangMenu from "../LangMenu/LangMenu"
+import { useLanguage } from "../LanguageContext/LanguageContext"
 
 function App() {
 	const [movies, setMovies] = useState<Movie[]>([])
@@ -35,7 +36,9 @@ function App() {
 	const [currentPage, setCurrentPage] = useState<number>(1)
 
 	const [storageQuery, setStorageQuery] = useLocalStorage("storageQuery", "")
-	const [sysLang, setSysLang] = useLocalStorage("sysLang", "uk-UA")
+	//const [sysLang, setSysLang] = useLocalStorage("sysLang", "uk-UA")
+
+	const { language, translationTexts } = useLanguage()
 
 	const closeModal = () => {
 		setIsModalOpen(false)
@@ -47,7 +50,7 @@ function App() {
 			query,
 			include_adult: true,
 			page,
-			language: sysLang,
+			language: language,
 		}
 		return qParams
 	}
@@ -80,7 +83,7 @@ function App() {
 			setIsError(false)
 			const data = await callBackFunc(queryParams)
 			if (!data.results.length) {
-				toastMessage(MyToastType.error, "No movies found for your request.")
+				toastMessage(MyToastType.error, translationTexts.toast_bad_request)
 			}
 			if (isPagination) {
 				setMovies((prev) => [...prev, ...data.results])
@@ -99,7 +102,7 @@ function App() {
 	const handleClick = async (movie_id: number) => {
 		const qParams: SearchParams = {
 			movie_id,
-			language: sysLang,
+			language: language,
 		}
 		try {
 			setIsLoading(true)
@@ -117,7 +120,7 @@ function App() {
 	}
 	const handleShowMenu = (langValue: string) => {
 		setIsMenulOpen(false)
-		setSysLang(langValue)
+		//setSysLang(langValue)
 		window.location.reload()
 		console.log(langValue)
 	}
@@ -125,7 +128,7 @@ function App() {
 	useEffect(() => {
 		const fetchData = async () => {
 			const qParams: SearchParams = {
-				language: sysLang,
+				language: language,
 			}
 			await renderMovies(qParams, getTrandingMovies, true)
 		}
