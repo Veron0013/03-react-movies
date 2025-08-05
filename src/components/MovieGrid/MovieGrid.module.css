@@ -26,9 +26,9 @@
 .image {
 	position: relative;
 	width: 100%;
-	max-width: 282px;
+	/*max-width: 282px;*/
 	height: 400px;
-	object-fit: cover;
+	object-fit: contain;
 	object-position: top;
 	display: block;
 }

@@ -28,6 +28,21 @@
 	text-decoration: underline;
 }
 
+.lang {
+	user-select: none;
+	font-size: 16px;
+	font-weight: 500;
+	color: #0a66c2;
+	text-decoration: none;
+	transition: color 0.2s ease;
+}
+
+.lang:hover {
+	cursor: pointer;
+	color: #004182;
+	font-weight: bold;
+}
+
 .form {
 	display: flex;
 	gap: 8px;

@@ -1,18 +1,26 @@
-.menu-button {
-	position: relative;
-	display: inline-block;
+.backdrop {
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 9999;
+	width: 100vw;
+	height: 100vh;
+	background-color: rgba(0, 0, 0, 0.3);
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 .menu__wrapper {
 	position: absolute;
 	top: 76px;
-	left: 70vw;
+	left: 50vw;
 	border: 1px solid #ccc;
 	background-color: transparent;
 	border: 0;
 	padding: 0;
 	margin: 0;
-	z-index: 10;
+	z-index: 1000;
 }
 
 .menu__wrapper ul {
@@ -28,6 +36,7 @@
 .menu__item {
 	width: 100%;
 	transition: all 3ms ease-in;
+	text-align: center;
 
 	&:hover,
 	&:focus {
