@@ -7,4 +7,4 @@ export const ADULT_ALERT: string = "/18_Plus.svg"
 export const NO_IMAGE: string = "/noImage.webp"
 export const SCROLL_TO_TOP: string = "/scrollToTop.svg"
 export const adultGenreIds: number[] = [10749, 53, 9648, 27]
-export const SCROLL_THRESHOLD = 1000
+export const SCROLL_THRESHOLD = 700

@@ -16,14 +16,19 @@ export default function MovieGrid({ movies, onSelect }: MovieGridProps) {
 	return (
 		<div>
 			<ul className={css.grid}>
-				{movies.map((item: Movie) => {
+				{movies.map((item: Movie, index: number) => {
 					//console.log(item)
 					const showAdultBadge = item.genre_ids ? isAdultGenre(item.genre_ids, item.adult || false) : false
 					const hasRating: boolean = item.vote_average > 0 || false
 					const picSource: string = item.poster_path !== null ? `${PIC_URL}${item.poster_path}` : NO_IMAGE
 
 					return (
-						<li key={item.id} id={item.id.toString()} onClick={handleClick}>
+						<li
+							key={item.id}
+							id={item.id.toString()}
+							onClick={handleClick}
+							style={{ animationDelay: `${index * 100}ms` }}
+						>
 							<div className={css.card}>
 								<img className={css.image} src={picSource} alt={item.title} loading="lazy" />
 								<h2 className={css.title}>{item.title}</h2>

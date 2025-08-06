@@ -13,7 +13,7 @@ export default function Loader() {
 
 	const { translationTexts } = useLanguage()
 
-	console.log("load")
+	//console.log("load")
 
 	return createPortal(
 		<div className={css.wrapper}>

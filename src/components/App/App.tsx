@@ -11,7 +11,7 @@ import ErrorMessage from "../ErrorMessage/ErrorMessage"
 import css from "./App.module.css"
 import MovieModal from "../MovieModal/MovieModal"
 import { useLanguage } from "../LanguageContext/LanguageContext"
-import { useLocalStorage } from "@uidotdev/usehooks"
+//import { useLocalStorage } from "@uidotdev/usehooks"
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
 import ReactPaginate from "react-paginate"
 import ScrollUp from "../ScrollUp/ScrollUp"
@@ -20,19 +20,15 @@ import { SCROLL_THRESHOLD, SEARCH_URL, TRANDING_URL } from "../../services/vars"
 function App() {
 	const [movie_id, setMovieId] = useState(0)
 	//const [varIsError, setIsError] = useState(false)
-	const [storageQuery, setStorageQuery] = useLocalStorage("storageQuery", "")
-
+	//const [storageQuery, setStorageQuery] = useLocalStorage("storageQuery", "")
+	const [storageQuery, setStorageQuery] = useState("")
 	const [isModalOpen, setIsModalOpen] = useState(false)
-	const [isTrending, setisTrending] = useState(storageQuery === "")
+	const [isTrending, setisTrending] = useState(true)
 	const [currentPage, setCurrentPage] = useState<number>(1)
 
 	const [isScrollUp, setScrollUp] = useState(false)
 
 	const { language, translationTexts } = useLanguage()
-
-	const closeModal = () => {
-		setIsModalOpen(false)
-	}
 
 	const { data, isLoading, isError } = useQuery({
 		queryKey: ["searchQuery", currentPage, storageQuery, isTrending, language],
@@ -80,6 +76,10 @@ function App() {
 		return await getMovieById(qParams)
 	}
 
+	const closeModal = () => {
+		setIsModalOpen(false)
+	}
+
 	const handleSearch = async (query: string) => {
 		setisTrending(false)
 		setCurrentPage(1)
@@ -93,7 +93,6 @@ function App() {
 
 	const handleSelectTrend = (): void => {
 		setisTrending(true)
-		setStorageQuery("")
 		setCurrentPage(1)
 	}
 
@@ -152,7 +151,7 @@ function App() {
 		}
 	}, [isModalOpen])
 
-	console.log(isLoading)
+	//console.log(isLoading)
 	return (
 		<>
 			<Toaster />
