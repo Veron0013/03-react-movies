@@ -173,7 +173,7 @@ function App() {
 					activeClassName={css.active}
 				/>
 			)}
-			{isLoading && <Loader />}
+			{varIsLoading && <Loader />}
 			{varIsError && <ErrorMessage />}
 			{data && data?.results?.length > 0 && <MovieGrid movies={data.results} onSelect={handleClick} />}
 			{isModalOpen && movieDetails && <MovieModal onClose={closeModal} movie={movieDetails} />}
