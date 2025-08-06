@@ -16,6 +16,7 @@
 	cursor: pointer;
 	transition: transform 0.3s ease, box-shadow 0.3s ease;
 	background-color: #222;
+	aspect-ratio: 2/3;
 }
 
 .card:hover {
@@ -27,7 +28,7 @@
 	position: relative;
 	width: 100%;
 	/*max-width: 282px;*/
-	height: 400px;
+	/*height: 380px;*/
 	object-fit: contain;
 	object-position: top;
 	display: block;

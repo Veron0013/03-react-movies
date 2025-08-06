@@ -22,6 +22,7 @@ export interface TranslationKeys {
 	noRevenue: string
 	pagiNext: string
 	pagiPrev: string
+	yup_min_query: string
 }
 
 export type LangType = "uk-UA" | "en-US"

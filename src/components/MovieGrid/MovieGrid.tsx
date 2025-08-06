@@ -17,6 +17,7 @@ export default function MovieGrid({ movies, onSelect }: MovieGridProps) {
 		<div>
 			<ul className={css.grid}>
 				{movies.map((item: Movie) => {
+					console.log(item)
 					const showAdultBadge = item.genre_ids ? isAdultGenre(item.genre_ids, item.adult || false) : false
 					const hasRating: boolean = item.vote_average > 0 || false
 					const picSource: string = item.poster_path !== null ? `${PIC_URL}${item.poster_path}` : NO_IMAGE

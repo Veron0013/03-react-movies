@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react"
-import { createPortal } from "react-dom"
 import { getMovieById, getMovies, getTrandingMovies, type SearchParams } from "../../services/movieService"
 import MovieGrid from "../MovieGrid/MovieGrid"
 import { Toaster } from "react-hot-toast"
-import { type Movie } from "../../types/movie"
 
 import SearchBar from "../SearchBar/SearchBar"
 import toastMessage, { MyToastType } from "../../services/messageService"
@@ -16,26 +14,31 @@ import { useLanguage } from "../LanguageContext/LanguageContext"
 import { useLocalStorage } from "@uidotdev/usehooks"
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
 import ReactPaginate from "react-paginate"
+import ScrollUp from "../ScrollUp/ScrollUp"
+import { SCROLL_THRESHOLD, SEARCH_URL, TRANDING_URL } from "../../services/vars"
 
 function App() {
 	const [movie_id, setMovieId] = useState(0)
+	//const [varIsError, setIsError] = useState(false)
+	const [storageQuery, setStorageQuery] = useLocalStorage("storageQuery", "")
 
 	const [isModalOpen, setIsModalOpen] = useState(false)
-	const [isTranding, setIsTranding] = useState(false)
+	const [isTrending, setisTrending] = useState(storageQuery === "")
 	const [currentPage, setCurrentPage] = useState<number>(1)
 
-	const [storageQuery, setStorageQuery] = useLocalStorage("storageQuery", "")
+	const [isScrollUp, setScrollUp] = useState(false)
+
 	const { language, translationTexts } = useLanguage()
 
 	const closeModal = () => {
 		setIsModalOpen(false)
 	}
 
-	const { data, isLoading, isError, isSuccess } = useQuery({
-		queryKey: ["searchQuery", currentPage, storageQuery, language],
+	const { data, isLoading, isError } = useQuery({
+		queryKey: ["searchQuery", currentPage, storageQuery, isTrending, language],
 		queryFn: async () => fetchQueryData(storageQuery),
 		placeholderData: keepPreviousData,
-		enabled: storageQuery !== "",
+		enabled: storageQuery !== "" || isTrending,
 	})
 
 	const {
@@ -46,18 +49,6 @@ function App() {
 		queryKey: ["searchById", movie_id, language],
 		queryFn: async () => fetchMovieIdData(),
 		enabled: movie_id > 0,
-	})
-
-	const {
-		data: trendingMovies,
-		isLoading: isTrendingLoading,
-		isError: isTrendingError,
-		isSuccess: isTrandingSuccess,
-	} = useQuery({
-		queryKey: ["trending", currentPage, storageQuery, isTranding, language],
-		queryFn: async () => fetchTrandingMovies(),
-		placeholderData: keepPreviousData,
-		enabled: !storageQuery,
 	})
 
 	const createQueryParams = (query: string = storageQuery, page: number = currentPage): SearchParams => {
@@ -71,11 +62,13 @@ function App() {
 	}
 
 	const fetchQueryData = async (query: string) => {
+		const url: string = isTrending ? TRANDING_URL : SEARCH_URL
 		const qParams: SearchParams = createQueryParams(query)
-		const res = await getMovies(qParams)
+		const res = await getMovies(url, qParams)
 		if (!res.results.length) {
 			toastMessage(MyToastType.error, translationTexts.toast_bad_request)
 		}
+		//setPrevStorageQuery(storageQuery)
 		return res
 	}
 
@@ -87,15 +80,8 @@ function App() {
 		return await getMovieById(qParams)
 	}
 
-	const fetchTrandingMovies = async () => {
-		const qParams: SearchParams = {
-			page: currentPage,
-			language,
-		}
-		return await getTrandingMovies(qParams)
-	}
-
 	const handleSearch = async (query: string) => {
+		setisTrending(false)
 		setCurrentPage(1)
 		setStorageQuery(query)
 	}
@@ -106,13 +92,44 @@ function App() {
 	}
 
 	const handleSelectTrend = (): void => {
-		setIsTranding(true)
+		setisTrending(true)
 		setStorageQuery("")
 		setCurrentPage(1)
 	}
 
+	const scrollToTop = () => {
+		window.scrollTo({ top: 0, behavior: "smooth" })
+		setScrollUp(false)
+	}
+
+	//console.log(movies)
+	const total_pages: number = data?.total_pages || 0
+
+	//	(storageQuery && data?.results?.length && data?.results) ||
+	//	(!storageQuery && trendingMovies?.results.length && trendingMovies?.results) ||
+	//	undefined
+
+	//const varIsSucess = isSuccess || isTrendingSuccess
+	const varIsLoading = isLoading || isLoadingMovieID
+	const varIsError = isError || isModalError
+
 	useEffect(() => {
-		/// Mobile Back закриває модалку а не виходить із боаузера
+		const handleScroll = () => {
+			if (window.scrollY > SCROLL_THRESHOLD) {
+				setScrollUp(true)
+			} else {
+				setScrollUp(false)
+			}
+		}
+
+		window.addEventListener("scroll", handleScroll)
+		return () => {
+			window.removeEventListener("scroll", handleScroll)
+		}
+	}, [])
+
+	useEffect(() => {
+		/// Mobile Back закриває модалку а не виходить із браузера
 		if (isModalOpen) {
 			// Додаємо новий запис у історію
 			window.history.pushState({ modal: true }, "")
@@ -135,21 +152,11 @@ function App() {
 		}
 	}, [isModalOpen])
 
-	//console.log(movies)
-	const total_pages: number =
-		(storageQuery && !isTranding && data?.total_pages) || (!storageQuery && trendingMovies?.total_pages) || 0
-
-	const movieaData: Movie[] = (storageQuery && data?.results) || (!storageQuery && trendingMovies?.results) || []
-
-	const varIsSucess = isSuccess || isTrandingSuccess
-	const varIsLoading = isLoading || isLoadingMovieID || isTrendingLoading
-	const varIsError = isError || isModalError || isTrendingError
-
 	return (
 		<>
 			<Toaster />
 			<SearchBar selectTrend={handleSelectTrend} onSubmit={handleSearch} />
-			{total_pages > 1 && varIsSucess && (
+			{total_pages > 1 && (
 				<ReactPaginate
 					breakLabel="..."
 					nextLabel=">"
@@ -165,10 +172,11 @@ function App() {
 					activeClassName={css.active}
 				/>
 			)}
-			{varIsLoading && createPortal(<Loader />, document.body)}
-			{varIsError && createPortal(<ErrorMessage />, document.body)}
-			{movieaData && movieaData.length > 0 && <MovieGrid movies={movieaData} onSelect={handleClick} />}
+			{varIsLoading && <Loader />}
+			{varIsError && <ErrorMessage />}
+			{data && data?.results?.length && <MovieGrid movies={data.results} onSelect={handleClick} />}
 			{isModalOpen && movieDetails && <MovieModal onClose={closeModal} movie={movieDetails} />}
+			{isScrollUp && <ScrollUp onClick={scrollToTop} />}
 		</>
 	)
 }

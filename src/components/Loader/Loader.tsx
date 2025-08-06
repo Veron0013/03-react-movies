@@ -1,3 +1,4 @@
+import { createPortal } from "react-dom"
 import { ScaleLoader } from "react-spinners"
 import css from "./Loader.module.css"
 import type { CSSProperties } from "react"
@@ -12,7 +13,7 @@ export default function Loader() {
 
 	const { translationTexts } = useLanguage()
 
-	return (
+	return createPortal(
 		<div className={css.wrapper}>
 			<ScaleLoader
 				color="#004182"
@@ -23,6 +24,7 @@ export default function Loader() {
 				data-testid="loader"
 			/>
 			<span className={css.text}>{translationTexts.loader_text}</span>
-		</div>
+		</div>,
+		document.body
 	)
 }

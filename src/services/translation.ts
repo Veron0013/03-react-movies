@@ -25,6 +25,7 @@ export const translations: Record<"uk-UA" | "en-US", TranslationKeys> = {
 		noRevenue: "Прибуток не вказано",
 		pagiNext: "наступна >",
 		pagiPrev: "< попередня",
+		yup_min_query: "замало, мінімум 2 символи",
 	},
 	"en-US": {
 		searchBar_lang: "EN",
@@ -50,5 +51,6 @@ export const translations: Record<"uk-UA" | "en-US", TranslationKeys> = {
 		noRevenue: "No revenue reported",
 		pagiNext: "next >",
 		pagiPrev: "< previous",
+		yup_min_query: "too short, min 2 symbols",
 	},
 }

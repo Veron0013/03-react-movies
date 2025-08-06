@@ -15,6 +15,15 @@
 	gap: 12px;
 }
 
+.container__data {
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 24px;
+}
+
+
 .link {
 	font-size: 16px;
 	font-weight: 500;
@@ -83,4 +92,18 @@
 
 .logo:hover {
 	filter: drop-shadow(0 0 2em #646cffaa);
+}
+
+.error {
+	position: absolute;
+	top: 42px;
+	left: 1px;
+	font-size: 10px;
+	color: orangered;
+}
+
+.wrapper {
+	position: relative;
+	margin: 0;
+	padding: 0;
 }

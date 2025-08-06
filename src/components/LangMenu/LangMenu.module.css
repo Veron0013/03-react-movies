@@ -34,6 +34,7 @@
 }
 
 .menu__item {
+	user-select: none;
 	width: 100%;
 	transition: all 3ms ease-in;
 	text-align: center;

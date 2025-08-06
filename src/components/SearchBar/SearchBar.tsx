@@ -2,30 +2,44 @@ import { useState } from "react"
 import toastMessage, { MyToastType } from "../../services/messageService"
 import LangMenu from "../LangMenu/LangMenu"
 import { useLanguage } from "../LanguageContext/LanguageContext"
-import styles from "./SearchBar.module.css"
+import css from "./SearchBar.module.css"
 import type { LangType } from "../../types/translationKeys"
 import { createPortal } from "react-dom"
+import { ErrorMessage, Field, Form, Formik, type FormikHelpers } from "formik"
+import * as Yup from "yup"
 
 interface SearchBarProps {
 	onSubmit: (query: string) => void
 	selectTrend: () => void
 }
 
+interface FormValues {
+	query: string
+}
+
 export default function SearchBar({ selectTrend, onSubmit }: SearchBarProps) {
+	const { translationTexts, setLanguage } = useLanguage()
+
 	const [isMenulOpen, setIsMenulOpen] = useState(false)
 	const [modalPos, setModalPos] = useState<{ top: number; left: number }>({ top: 0, left: 0 })
 
-	const handleSubmit = (formData: FormData) => {
-		const queryData = formData.get("query") as string
+	const initialFormValues: FormValues = {
+		query: "",
+	}
+	const OrderSchema = Yup.object().shape({
+		query: Yup.string().min(2, translationTexts.yup_min_query),
+	})
 
+	const handleSubmit = (values: FormValues, formikHelpers: FormikHelpers<FormValues>) => {
+		const queryData = values.query.trim()
+
+		formikHelpers.resetForm()
 		if (!queryData.trim().length) {
 			toastMessage(MyToastType.loading, translationTexts.toast_no_request)
 			return
 		}
-		onSubmit(queryData.trim())
+		onSubmit(queryData)
 	}
-
-	const { translationTexts, setLanguage } = useLanguage()
 
 	function handleShowMenu(langValue: LangType): void {
 		setIsMenulOpen(false)
@@ -50,35 +64,42 @@ export default function SearchBar({ selectTrend, onSubmit }: SearchBarProps) {
 	}
 
 	return (
-		<header className={styles.header}>
-			<div className={styles.container}>
-				<a className={styles.link} href="https://www.themoviedb.org/" target="_blank" rel="noopener noreferrer">
+		<header className={css.header}>
+			<div className={css.container}>
+				<a className={css.link} href="https://www.themoviedb.org/" target="_blank" rel="noopener noreferrer">
 					{`${translationTexts.searchBar_poweredBy} TMDB`}
 				</a>
-				<p className={styles.lang} onClick={handleTranding}>
-					{translationTexts.searchBar_Trend}
-				</p>
-				<p className={styles.lang} onClick={handleMenu}>
-					{translationTexts.searchBar_lang}
-				</p>
-				{isMenulOpen &&
-					createPortal(
-						<LangMenu onClose={handleCloseMenu} onSelect={handleShowMenu} position={modalPos} />,
-						document.body
-					)}
-				<form action={handleSubmit} className={styles.form}>
-					<input
-						className={styles.input}
-						type="text"
-						name="query"
-						autoComplete="off"
-						placeholder={translationTexts.searchBar_placeholder}
-						autoFocus
-					/>
-					<button className={styles.button} type="submit">
-						{translationTexts.searchBar_Button}
-					</button>
-				</form>
+				<div className={css.container__data}>
+					<p className={css.lang} onClick={handleTranding}>
+						{translationTexts.searchBar_Trend}
+					</p>
+					<p className={css.lang} onClick={handleMenu}>
+						{translationTexts.searchBar_lang}
+					</p>
+					{isMenulOpen &&
+						createPortal(
+							<LangMenu onClose={handleCloseMenu} onSelect={handleShowMenu} position={modalPos} />,
+							document.body
+						)}
+					<Formik initialValues={initialFormValues} validationSchema={OrderSchema} onSubmit={handleSubmit}>
+						<Form className={css.form}>
+							<div className={css.wrapper}>
+								<Field
+									className={css.input}
+									type="text"
+									name="query"
+									autoComplete="off"
+									placeholder={translationTexts.searchBar_placeholder}
+									autoFocus
+								/>
+								<ErrorMessage name="query" component="div" className={css.error} />
+							</div>
+							<button className={css.button} type="submit">
+								{translationTexts.searchBar_Button}
+							</button>
+						</Form>
+					</Formik>
+				</div>
 			</div>
 		</header>
 	)

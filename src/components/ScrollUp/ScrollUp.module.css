@@ -1,0 +1,13 @@
+.scroller {
+	position: fixed;
+	user-select: none;
+	bottom: 40px;
+	right: 40px;
+	cursor: pointer;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+	z-index: 1000;
+}
+
+.scroller img {
+	width: 60px;
+}
