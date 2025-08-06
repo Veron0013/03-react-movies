@@ -1,6 +1,6 @@
 import axios from "axios"
 import { type Movie } from "../types/movie"
-import { SEARCH_URL, TRANDING_URL, DETAILS_URL, adultGenreIds } from "./vars"
+import { TRANDING_URL, DETAILS_URL, adultGenreIds } from "./vars"
 
 export interface SearchParams {
 	include_adult?: boolean
