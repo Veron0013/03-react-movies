@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { getMovieById, getMovies, getTrandingMovies, type SearchParams } from "../../services/movieService"
+import { getMovieById, getMovies, type SearchParams } from "../../services/movieService"
 import MovieGrid from "../MovieGrid/MovieGrid"
 import { Toaster } from "react-hot-toast"
 
@@ -152,6 +152,7 @@ function App() {
 		}
 	}, [isModalOpen])
 
+	console.log(isLoading)
 	return (
 		<>
 			<Toaster />
@@ -172,9 +173,9 @@ function App() {
 					activeClassName={css.active}
 				/>
 			)}
-			{varIsLoading && <Loader />}
+			{isLoading && <Loader />}
 			{varIsError && <ErrorMessage />}
-			{data && data?.results?.length && <MovieGrid movies={data.results} onSelect={handleClick} />}
+			{data && data?.results?.length > 0 && <MovieGrid movies={data.results} onSelect={handleClick} />}
 			{isModalOpen && movieDetails && <MovieModal onClose={closeModal} movie={movieDetails} />}
 			{isScrollUp && <ScrollUp onClick={scrollToTop} />}
 		</>
